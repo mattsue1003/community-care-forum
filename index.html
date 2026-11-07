@@ -36,6 +36,7 @@ header.top .wrap{position:relative;z-index:1}
 header.top .eyebrow{color:#1f4f73}
 header.top .lede{color:#2a4a63;background:rgb(255 253 248 / .72);padding:8px 12px;border-radius:6px;max-width:72ch}
 header.top .meta{color:#2a4a63}
+.notice{margin:8px 0 0;max-width:72ch;font-size:13px;line-height:1.6;color:#6b4a12;background:rgb(255 248 228 / .92);border:1px solid #ecd9a8;padding:6px 12px;border-radius:6px}
 header.top .track{background:rgb(255 253 248 / .85);border-color:rgb(255 255 255 / .9)}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted)}
 h1{font-family:var(--f-display);font-weight:900;font-size:clamp(24px,4vw,38px);line-height:1.25;margin:6px 0 8px;text-wrap:balance}
@@ -126,9 +127,10 @@ footer{padding-bottom:calc(18px + var(--mini-h,0px))}
 </style>
 
 <header class="top"><div class="wrap">
-  <div class="eyebrow">衛生福利部 · 115 年度 · 第一天直播 7:48:19 · 2026/11/05</div>
+  <div class="eyebrow">資料來源：衛生福利部直播 · 115 年度 · 第一天 7:48:19 · 2026/11/05</div>
   <h1>全國社區式照顧服務研討會 重點資料庫</h1>
   <p class="lede">把第一天整場直播拆成一則一則的重點：政府政策方向、第一線的困境、各單位的處理方法、現場問答。用左邊的篩選或搜尋找到你要的段落，按時間碼就會跳到 YouTube 那一秒。</p>
+  <p class="notice">本頁為個人整理的學習筆記，非衛生福利部官方資料，也未經主辦單位或講者審閱。內容以重點摘要呈現，完整內容與正式政策請以原直播影片及衛福部公告為準。</p>
   <div class="meta" id="meta"></div>
   <div class="tracks" id="tracks"></div>
 </div></header>
@@ -216,7 +218,7 @@ function init(){
     <div class="pcols"><div><h3><span class="src s-中央">中央</span> 長照司說明與轉述的規劃</h3><ol>${pol("中央")}</ol></div>
     ${pol("地方政府")?`<div><h3><span class="src s-地方政府">地方政府</span></h3><ol>${pol("地方政府")}</ol></div>`:""}
     <div><h3><span class="src s-民間建言">民間建言</span> 講者對政策的主張</h3><ol>${pol("民間建言")}</ol></div></div>`;
-  $("#foot").innerHTML=`資料來源：衛生福利部 YouTube 直播〈115年度「全國社區式照顧服務研討會」〉（<a href="https://www.youtube.com/watch?v=${VID}" target="_blank" rel="noopener">youtube.com/watch?v=${VID}</a>）。重點由語音辨識逐字稿整理，人名、數字與條文請以影片原音及衛福部公告為準。時間碼會提前 3 秒開始播放。`;
+  $("#foot").innerHTML=`本頁為個人整理，非衛生福利部官方網站；影片著作權屬原權利人，本頁僅以連結及 YouTube 官方嵌入方式播放，不提供影片、音訊或逐字稿下載。<br>資料來源：衛生福利部 YouTube 直播〈115年度「全國社區式照顧服務研討會」〉（<a href="https://www.youtube.com/watch?v=${VID}" target="_blank" rel="noopener">youtube.com/watch?v=${VID}</a>）。重點由語音辨識逐字稿整理，人名、數字與條文請以影片原音及衛福部公告為準。時間碼會提前 3 秒開始播放。`;
   sel("#sort").value=st.sort; render();
 }
 function sel(s){return document.querySelector(s)}
