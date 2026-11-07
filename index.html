@@ -22,6 +22,7 @@
   color-scheme:light;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg) var(--grain);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7}
 a{color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -74,7 +75,6 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(24px,4vw,38px);l
 .sess button[aria-pressed="true"]{background:var(--accent-soft);font-weight:700}
 .reset{font:inherit;font-size:13px;border:0;background:none;color:var(--accent);cursor:pointer;padding:0;text-decoration:underline}
 
-.status{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:12px}
 .status .count{font-weight:700}
 .status select{font:inherit;font-size:13px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
 .policy-strip{background:var(--paper) var(--grain);border-top:4px solid var(--sky);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:18px}
@@ -124,12 +124,62 @@ footer{border-top:1px solid var(--line);padding-block:18px;font-size:12.5px;colo
 .mini .cap button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;padding:2px 8px;cursor:pointer}
 .card.playing{outline:2px solid var(--accent)}
 footer{padding-bottom:calc(18px + var(--mini-h,0px))}
+
+/* 工具列、篩選抽屜、目前條件 */
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;display:flex;gap:8px;align-items:center;padding-block:10px;margin-bottom:4px;background:var(--bg) var(--grain)}
+.toolbar .search{flex:1;min-width:0}
+.toolbar .search input{padding:9px 12px}
+.toolbar select{font:inherit;font-size:14px;height:42px;padding:0 8px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
+.fbtn{display:none;font:inherit;font-size:15px;font-weight:700;height:42px;padding:0 14px;border-radius:6px;border:1px solid var(--sky-deep);background:var(--sky-deep);color:#fff;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.fbtn .fn{background:#fff;color:var(--sky-deep);border-radius:999px;font-size:12px;min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 5px}
+.active{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-bottom:12px;font-size:14px}
+.active .count{font-weight:700;margin-right:4px}
+.pill{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:2px 6px 2px 10px;border-radius:999px;border:1px solid var(--sky-deep);background:var(--sky-pale);color:var(--ink);cursor:pointer}
+.pill b{font-weight:400;color:var(--muted);font-size:15px;line-height:1;padding:0 4px}
+.linkbtn{font:inherit;font-size:14px;border:0;background:none;color:var(--accent);cursor:pointer;padding:6px 2px;text-decoration:underline}
+.side-head,.side-foot .primary{display:none}
+.side-foot{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.primary{font:inherit;font-size:15px;font-weight:700;border:0;border-radius:8px;background:var(--sky-deep);color:#fff;padding:12px 18px;cursor:pointer;flex:1}
+details.policy-strip>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:10px;justify-content:space-between}
+details.policy-strip>summary::-webkit-details-marker{display:none}
+details.policy-strip>summary h2{margin:0}
+details.policy-strip>summary .sum-n{font-size:13px;color:var(--muted);white-space:nowrap}
+details.policy-strip>summary .sum-n::after{content:" ▾";}
+details.policy-strip[open]>summary .sum-n::after{content:" ▴"}
+details.policy-strip[open]>summary{margin-bottom:10px}
+.tag{padding:6px 2px;min-height:32px}
+.backdrop{position:fixed;inset:0;z-index:39;background:rgb(31 51 71 / .35)}
+.totop{position:fixed;z-index:21;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px) + var(--mini-h,0px));font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);box-shadow:0 4px 14px rgb(31 51 71 / .15);cursor:pointer}
+@media (max-width:860px){
+  header.top{padding-block:20px 16px}
+  .lede{font-size:14px}
+  .notice{font-size:12px}
+  .tracks{gap:6px}.track{font-size:12px;padding:3px 8px}
+  .meta{gap:4px 12px;font-size:12.5px}
+  .agenda{display:none}
+  .main{padding-block:14px 60px;gap:0}
+  .fbtn{display:inline-flex}
+  .toolbar select{width:84px;padding:0 4px;font-size:13px}
+  .fbtn{padding:0 12px}
+  .side{position:fixed;left:0;right:0;bottom:0;z-index:40;max-height:86vh;overflow:auto;overscroll-behavior:contain;background:var(--paper);border-radius:16px 16px 0 0;box-shadow:0 -8px 30px rgb(31 51 71 / .2);
+    padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));gap:18px;transform:translateY(105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
+  .side.open{transform:none;visibility:visible;transition:transform .25s ease}
+  .side-head{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1;background:var(--paper);padding-block:14px 8px;border-bottom:1px solid var(--line);font-size:17px}
+  .side-foot{position:sticky;bottom:0;background:var(--paper);padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+  .side-foot .primary{display:block}
+  .sess button{padding:8px 6px}
+  .chip{min-height:36px;font-size:14px}
+  .mini{left:max(8px,env(safe-area-inset-left,0px));right:max(8px,env(safe-area-inset-right,0px));width:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+}
+.policy-strip:not(.all) .pcols li:nth-child(n+7){display:none}
+.morebtn{margin-top:10px;font:inherit;font-size:14px;font-weight:700;color:var(--accent);background:var(--sky-pale);border:1px solid var(--line);border-radius:6px;padding:8px 14px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.side,.side.open{transition:none}}
 </style>
 
 <header class="top"><div class="wrap">
   <div class="eyebrow">資料來源：衛生福利部直播 · 115 年度 · 第一天 7:48:19 · 2026/11/05</div>
   <h1>全國社區式照顧服務研討會 重點資料庫</h1>
-  <p class="lede">把第一天整場直播拆成一則一則的重點：政府政策方向、第一線的困境、各單位的處理方法、現場問答。用左邊的篩選或搜尋找到你要的段落，按時間碼就會跳到 YouTube 那一秒。</p>
+  <p class="lede">把第一天整場直播拆成一則一則的重點：政府政策方向、第一線的困境與解法、現場問答。搜尋或篩選找到想看的段落，點時間碼就能看影片那一段。</p>
   <p class="notice">本頁為個人整理的學習筆記，非衛生福利部官方資料，也未經主辦單位或講者審閱。內容以重點摘要呈現，完整內容與正式政策請以原直播影片及衛福部公告為準。影片為主辦單位提供與會者觀看（YouTube 不公開影片）。</p>
   <div class="meta" id="meta"></div>
   <div class="tracks" id="tracks"></div>
@@ -142,22 +192,27 @@ footer{padding-bottom:calc(18px + var(--mini-h,0px))}
 </div></section>
 
 <div class="wrap main">
-  <aside class="side">
-    <div class="search"><label for="q" class="eyebrow" style="display:block;margin-bottom:6px">搜尋關鍵字</label>
-      <input id="q" type="search" placeholder="例如：夜間、人力、復能、交通、收費" autocomplete="off"></div>
+  <aside class="side" id="side" aria-label="篩選條件">
+    <div class="side-head"><b>篩選</b><button type="button" class="linkbtn" id="closeSide">完成</button></div>
     <div><h2>類別</h2><div class="chips" id="types"></div></div>
     <div><h2>主題</h2><div class="chips" id="themes"></div></div>
     <div><h2>常見標籤</h2><div class="chips" id="tagcloud"></div></div>
     <div><h2>場次</h2><div class="sess" id="sessions"></div></div>
-    <button class="reset" id="reset" type="button">清除全部篩選</button>
+    <div class="side-foot"><button class="linkbtn" id="reset" type="button">清除全部篩選</button><button type="button" class="primary" id="applySide">看結果</button></div>
   </aside>
   <main style="min-width:0">
-    <div class="policy-strip" id="policy"></div>
-    <div class="status"><span><span class="count" id="count"></span></span>
-      <label>排序 <select id="sort"><option value="time">影片時間</option><option value="type">類別</option></select></label></div>
+    <details class="policy-strip" id="policyBox" open><summary><h2>政府未來政策方向一覽</h2><span class="sum-n" id="polN"></span></summary><div id="policy"></div><button type="button" class="morebtn" id="morePol">顯示全部政策方向</button></details>
+    <div class="toolbar" id="toolbar">
+      <div class="search"><input id="q" type="search" placeholder="搜尋關鍵字" autocomplete="off" aria-label="搜尋關鍵字" enterkeyhint="search"></div>
+      <button type="button" class="fbtn" id="openSide" aria-controls="side">篩選<span class="fn" id="fcount" hidden></span></button>
+      <select id="sort" aria-label="排序"><option value="time">依時間</option><option value="type">依類別</option></select>
+    </div>
+    <div class="active" id="active" aria-live="polite"></div>
     <div class="list" id="list"></div>
   </main>
 </div>
+<div class="backdrop" id="backdrop" hidden></div>
+<button type="button" class="totop" id="totop" hidden aria-label="回到頂端">↑ 頂端</button>
 <div class="mini" id="mini" hidden><div class="vid"><iframe id="ytf" title="研討會直播影片" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
   <div class="cap"><span id="nowp"></span><a id="ytout" target="_blank" rel="noopener">到 YouTube</a><button type="button" id="closep">關閉</button></div></div>
 <footer><div class="wrap" id="foot"></div></footer>
@@ -196,7 +251,13 @@ function render(){
   $("#sessions").innerHTML=D.sessions.map((s,i)=>`<button type="button" aria-pressed="${st.sess===i}" data-i="${i}"><span class="tm">${fmt(s.t)}</span><span>${esc(s.title)}${s.who?`<br><span class="theme">${esc(s.who)}</span>`:""}</span></button>`).join("");
   document.querySelectorAll("#bar button").forEach((b,i)=>b.classList.toggle("on",st.sess===i));
   const list=[...pool].sort(st.sort==="type"?(a,b)=>TYPES.indexOf(a.type)-TYPES.indexOf(b.type)||a.t-b.t:(a,b)=>a.t-b.t);
-  $("#count").textContent=`找到 ${list.length} 則（共 ${D.items.length} 則）`;
+  const act=[];
+  if(st.q) act.push([`搜尋「${st.q}」`,"q"]);
+  st.types.forEach(v=>act.push([v,"type:"+v])); st.themes.forEach(v=>act.push([v,"theme:"+v]));
+  if(st.tag) act.push(["#"+st.tag,"tag"]); if(st.sess!==null) act.push([D.sessions[st.sess].short||D.sessions[st.sess].title,"sess"]);
+  $("#active").innerHTML=`<span class="count">找到 ${list.length} 則</span>`+(act.length?act.map(([l,k])=>`<button type="button" class="pill" data-clear="${esc(k)}" aria-label="取消 ${esc(l)}">${esc(l)}<b>×</b></button>`).join("")+`<button type="button" class="linkbtn" data-clear="all">全部清除</button>`:`<span class="theme">（共 ${D.items.length} 則，未篩選）</span>`);
+  const nf=act.filter(a=>a[1]!=="q").length; $("#fcount").hidden=!nf; $("#fcount").textContent=nf;
+  $("#applySide").textContent=`看 ${list.length} 則結果`;
   $("#list").innerHTML=list.length?list.map(it=>`<article class="card">
     <a class="tbtn" href="${yt(it.t)}" target="_blank" rel="noopener" title="在 YouTube 從這裡播放">▶ ${fmt(it.t)}</a>
     <div class="head"><span class="badge b-${it.type}">${it.type}</span>${it.src?`<span class="src s-${it.src}">${it.src}</span>`:""}<span class="theme">${esc(it.theme)} · ${esc(D.sessions[it._s]?.title||"")}</span></div>
@@ -212,9 +273,10 @@ function init(){
   $("#meta").innerHTML=TYPES.map(t=>`<span><b>${nT(t)}</b> ${t}</span>`).join("")+`<span><b>${D.sessions.length}</b> 個場次</span>`;
   $("#tracks").innerHTML=(D.tracks||[]).map((t,i)=>`<span class="track">主題${"一二三"[i]}　${esc(t)}${i===2?"（第二天，不在本影片）":""}</span>`).join("");
   $("#bar").innerHTML=D.sessions.map((s,i)=>{const end=D.sessions[i+1]?.t??DUR;return `<button type="button" data-i="${i}" style="flex:${end-s.t} 0 0" title="${fmt(s.t)} ${esc(s.title)}">${esc(s.short||s.title)}</button>`}).join("");
-  $("#ticks").innerHTML=[0,3600,7200,10800,14400,18000,21600,25200,DUR].map(t=>`<span style="left:${t/DUR*100}%">${t===DUR?fmt(t):t/3600+"h"}</span>`).join("");
+  $("#ticks").innerHTML=[0,3600,7200,10800,14400,18000,21600,DUR].map(t=>`<span style="left:${t/DUR*100}%">${t===DUR?fmt(t):t/3600+"h"}</span>`).join("");
   const pol=src=>D.items.filter(i=>i.type==="政策方向"&&i.src===src).sort((a,b)=>a.t-b.t).map(i=>`<li><a href="#list" class="pgo" data-goto="${i._i}">${esc(i.title)}</a> <a href="${yt(i.t)}" target="_blank" rel="noopener" class="theme">${fmt(i.t)}</a></li>`).join("");
-  $("#policy").innerHTML=`<h2>政府未來政策方向一覽</h2>
+  $("#polN").textContent=`${D.items.filter(i=>i.type==="政策方向").length} 則`;
+  $("#policy").innerHTML=`
     <div class="pcols"><div><h3><span class="src s-中央">中央</span> 長照司說明與轉述的規劃</h3><ol>${pol("中央")}</ol></div>
     ${pol("地方政府")?`<div><h3><span class="src s-地方政府">地方政府</span></h3><ol>${pol("地方政府")}</ol></div>`:""}
     <div><h3><span class="src s-民間建言">民間建言</span> 講者對政策的主張</h3><ol>${pol("民間建言")}</ol></div></div>`;
@@ -228,15 +290,35 @@ document.addEventListener("click",e=>{
     if(box==="types"){st.types.has(v)?st.types.delete(v):st.types.add(v)}
     else if(box==="themes"){st.themes.has(v)?st.themes.delete(v):st.themes.add(v)}
     else if(box==="tagcloud"){st.tag=st.tag===v?null:v}
+    render();toList();return}
+  const tg=e.target.closest(".tag"); if(tg){st.tag=tg.dataset.tag;render();toList(true);return}
+  const s=e.target.closest("#sessions button,#bar button"); if(s){const i=+s.dataset.i;st.sess=st.sess===i?null:i;render();toList(!!s.closest("#bar"));return}
+  const cl=e.target.closest("[data-clear]"); if(cl){const k=cl.dataset.clear;
+    if(k==="all"){clearAll()}else if(k==="q"){st.q="";sel("#q").value=""}else if(k==="tag"){st.tag=null}else if(k==="sess"){st.sess=null}
+    else if(k.startsWith("type:")){st.types.delete(k.slice(5))}else if(k.startsWith("theme:")){st.themes.delete(k.slice(6))}
     render();return}
-  const tg=e.target.closest(".tag"); if(tg){st.tag=tg.dataset.tag;render();window.scrollTo({top:sel(".main").offsetTop,behavior:"smooth"});return}
-  const s=e.target.closest("#sessions button,#bar button"); if(s){const i=+s.dataset.i;st.sess=st.sess===i?null:i;render();return}
   const g=e.target.closest("[data-goto]"); if(g){e.preventDefault();const it=D.items[+g.dataset.goto];st.types=new Set(["政策方向"]);st.themes.clear();st.tag=null;st.sess=null;st.q="";sel("#q").value="";render();
     const idx=[...document.querySelectorAll("#list .card")].findIndex(el=>el.querySelector("h3").textContent===it.title);const el=document.querySelectorAll("#list .card")[idx];el?.scrollIntoView({behavior:"smooth",block:"center"});return}
 });
 let tmr; sel("#q").addEventListener("input",e=>{clearTimeout(tmr);tmr=setTimeout(()=>{st.q=e.target.value.trim();render()},120)});
 sel("#sort").addEventListener("change",e=>{st.sort=e.target.value;render()});
-sel("#reset").addEventListener("click",()=>{st.q="";st.types.clear();st.themes.clear();st.tag=null;st.sess=null;sel("#q").value="";render()});
+function clearAll(){st.q="";st.types.clear();st.themes.clear();st.tag=null;st.sess=null;sel("#q").value=""}
+sel("#reset").addEventListener("click",()=>{clearAll();render()});
+const MOB=matchMedia("(max-width:860px)");
+// 篩選後若清單頂端已捲出畫面，帶回清單開頭；手機抽屜開著時不動
+function toList(force){ if(sel("#side").classList.contains("open")) return;
+  const y=sel("#toolbar").getBoundingClientRect().top+scrollY-4; if(force||scrollY>y) scrollTo({top:y,behavior:"smooth"}); }
+function openSide(){sel("#side").classList.add("open");sel("#backdrop").hidden=false;document.body.style.overflow="hidden";sel("#closeSide").focus({preventScroll:true})}
+function closeSide(){if(!sel("#side").classList.contains("open"))return;sel("#side").classList.remove("open");sel("#backdrop").hidden=true;document.body.style.overflow="";toList();sel("#openSide").focus({preventScroll:true})}
+sel("#openSide").addEventListener("click",openSide);
+["#closeSide","#applySide","#backdrop"].forEach(x=>sel(x).addEventListener("click",closeSide));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSide(); if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();sel("#q").focus()}});
+MOB.addEventListener("change",()=>{if(!MOB.matches)closeSide()});
+sel("#q").addEventListener("keydown",e=>{if(e.key==="Enter"){e.target.blur();toList()}});
+sel("#policyBox").open=!MOB.matches;
+const tt=sel("#totop"); addEventListener("scroll",()=>{tt.hidden=scrollY<1000},{passive:true});
+sel("#morePol").addEventListener("click",e=>{const b=sel("#policyBox");b.classList.toggle("all");e.target.textContent=b.classList.contains("all")?"收合為前 6 則":"顯示全部政策方向"});
+tt.addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
 // 在 GitHub Pages／本機上可內嵌 YouTube；artifact 內不行，維持開新分頁
 const EMBED=/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
 document.addEventListener("click",e=>{
@@ -252,6 +334,6 @@ document.addEventListener("click",e=>{
   document.querySelectorAll(".card.playing").forEach(c=>c.classList.remove("playing")); card?.classList.add("playing");
 });
 sel("#closep").addEventListener("click",()=>{sel("#ytf").src="about:blank";sel("#mini").hidden=true;document.documentElement.style.setProperty("--mini-h","0px")});
-if(EMBED) document.querySelector(".lede").insertAdjacentHTML("beforeend"," 點時間碼會在右下角的小視窗播放。");
+if(EMBED) document.querySelector(".lede").insertAdjacentHTML("beforeend"," 影片會在頁面上的小視窗播放，不用離開這一頁。");
 init();
 </script>
