@@ -37,6 +37,7 @@ header.top .wrap{position:relative;z-index:1}
 header.top .eyebrow{color:#1f4f73}
 header.top .lede{color:#2a4a63;background:rgb(255 253 248 / .72);padding:8px 12px;border-radius:6px;max-width:72ch}
 header.top .meta{color:#2a4a63}
+.notice.warn{color:#7a2e22;background:rgb(253 236 230 / .95);border-color:#efc1b4}
 .notice{margin:8px 0 0;max-width:72ch;font-size:13px;line-height:1.6;color:#6b4a12;background:rgb(255 248 228 / .92);border:1px solid #ecd9a8;padding:6px 12px;border-radius:6px}
 header.top .track{background:rgb(255 253 248 / .85);border-color:rgb(255 255 255 / .9)}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted)}
@@ -180,7 +181,8 @@ details.policy-strip[open]>summary{margin-bottom:10px}
   <div class="eyebrow">資料來源：衛生福利部直播 · 115 年度 · 第一天 7:48:19 · 2026/11/05</div>
   <h1>全國社區式照顧服務研討會 重點資料庫</h1>
   <p class="lede">把第一天整場直播拆成一則一則的重點：政府政策方向、第一線的困境與解法、現場問答。搜尋或篩選找到想看的段落，點時間碼就能看影片那一段。</p>
-  <p class="notice">本頁為個人整理的學習筆記，非衛生福利部官方資料，也未經主辦單位或講者審閱。內容以重點摘要呈現，完整內容與正式政策請以原直播影片及衛福部公告為準。影片為主辦單位提供與會者觀看（YouTube 不公開影片）。</p>
+  <p class="notice warn"><b>影片暫時無法播放：</b>主辦單位已於 2026/11/10 前將研討會影片設為私人，頁面上的時間碼與小視窗目前打不開。263 則文字重點仍可正常搜尋與篩選；影片若重新開放，時間碼就會恢復。</p>
+  <p class="notice">本頁為個人整理的學習筆記，非衛生福利部官方資料，也未經主辦單位或講者審閱。內容以重點摘要呈現，完整內容與正式政策請以原直播影片及衛福部公告為準。影片為主辦單位提供與會者觀看。</p>
   <div class="meta" id="meta"></div>
   <div class="tracks" id="tracks"></div>
 </div></header>
@@ -271,7 +273,7 @@ function render(){
 function init(){
   const nT=t=>D.items.filter(i=>i.type===t).length;
   $("#meta").innerHTML=TYPES.map(t=>`<span><b>${nT(t)}</b> ${t}</span>`).join("")+`<span><b>${D.sessions.length}</b> 個場次</span>`;
-  $("#tracks").innerHTML=(D.tracks||[]).map((t,i)=>`<span class="track">主題${"一二三"[i]}　${esc(t)}${i===2?"（第二天，不在本影片）":""}</span>`).join("");
+  $("#tracks").innerHTML=(D.tracks||[]).map((t,i)=>`<span class="track">主題${"一二三"[i]}　${esc(t)}${i===2?"（第二天，影片已設為私人，尚未整理）":""}</span>`).join("");
   $("#bar").innerHTML=D.sessions.map((s,i)=>{const end=D.sessions[i+1]?.t??DUR;return `<button type="button" data-i="${i}" style="flex:${end-s.t} 0 0" title="${fmt(s.t)} ${esc(s.title)}">${esc(s.short||s.title)}</button>`}).join("");
   $("#ticks").innerHTML=[0,3600,7200,10800,14400,18000,21600,DUR].map(t=>`<span style="left:${t/DUR*100}%">${t===DUR?fmt(t):t/3600+"h"}</span>`).join("");
   const pol=src=>D.items.filter(i=>i.type==="政策方向"&&i.src===src).sort((a,b)=>a.t-b.t).map(i=>`<li><a href="#list" class="pgo" data-goto="${i._i}">${esc(i.title)}</a> <a href="${yt(i.t)}" target="_blank" rel="noopener" class="theme">${fmt(i.t)}</a></li>`).join("");
@@ -280,7 +282,7 @@ function init(){
     <div class="pcols"><div><h3><span class="src s-中央">中央</span> 長照司說明與轉述的規劃</h3><ol>${pol("中央")}</ol></div>
     ${pol("地方政府")?`<div><h3><span class="src s-地方政府">地方政府</span></h3><ol>${pol("地方政府")}</ol></div>`:""}
     <div><h3><span class="src s-民間建言">民間建言</span> 講者對政策的主張</h3><ol>${pol("民間建言")}</ol></div></div>`;
-  $("#foot").innerHTML=`本頁為個人整理，非衛生福利部官方網站；影片著作權屬原權利人，本頁僅以連結及 YouTube 官方嵌入方式播放，不提供影片、音訊或逐字稿下載。影片為主辦單位提供與會者觀看（YouTube 不公開影片），若主辦單位調整觀看權限，時間碼將無法播放。<br>資料來源：衛生福利部 YouTube 直播〈115年度「全國社區式照顧服務研討會」〉（<a href="https://www.youtube.com/watch?v=${VID}" target="_blank" rel="noopener">youtube.com/watch?v=${VID}</a>）。重點由語音辨識逐字稿整理，人名、數字與條文請以影片原音及衛福部公告為準。時間碼會提前 3 秒開始播放。`;
+  $("#foot").innerHTML=`本頁為個人整理，非衛生福利部官方網站；影片著作權屬原權利人，本頁僅以連結及 YouTube 官方嵌入方式播放，不提供影片、音訊或逐字稿下載。影片為主辦單位提供與會者觀看（YouTube 不公開影片），主辦單位已將影片設為私人，時間碼目前無法播放。<br>資料來源：衛生福利部 YouTube 直播〈115年度「全國社區式照顧服務研討會」〉（<a href="https://www.youtube.com/watch?v=${VID}" target="_blank" rel="noopener">youtube.com/watch?v=${VID}</a>）。重點由語音辨識逐字稿整理，人名、數字與條文請以影片原音及衛福部公告為準。時間碼會提前 3 秒開始播放。`;
   sel("#sort").value=st.sort; render();
 }
 function sel(s){return document.querySelector(s)}
